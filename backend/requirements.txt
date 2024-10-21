@@ -3,3 +3,6 @@ djangorestframework
 markdown
 django-filter
 django-extensions
+django-extensions-shell
+psycopg2-binary
+uuid

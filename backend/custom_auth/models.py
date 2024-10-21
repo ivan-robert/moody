@@ -5,7 +5,8 @@ from django.db import models
 
 class User(AbstractUser):
     related_name = "custom_user"
-    username = models.CharField(max_length=150, unique=True)
+    USERNAME_FIELD = "user_id"
+    username = models.CharField(max_length=150)
     user_id = models.CharField(max_length=150, unique=True, blank=True)
 
     def generate_unique_id(self):

@@ -6,7 +6,7 @@ services:
     volumes:
       - ./postgres-moody:/var/lib/postgresql/data # Change the volume path here
     environment:
-      POSTGRES_DB: moody
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: postgres
@@ -33,7 +33,7 @@ services:
   shell:
     image: moody-django
     build: .
-    command: sh -c "python manage.py shell"
+    command: sh -c "python manage.py shell_plus"
     env_file:
       - .env.dev
     volumes:

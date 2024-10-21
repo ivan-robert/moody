@@ -24,12 +24,12 @@ class MessageViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request: Request, pk=None):
         message = self.get_object()
         serializer = self.serializer_class(message)
         return Response(serializer.data)
 
-    def update(self, request, pk=None):
+    def update(self, request: Request, pk=None):
         message = self.get_object()
         serializer = self.serializer_class(message, data=request.data)
         if serializer.is_valid():
@@ -37,7 +37,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk=None):
+    def destroy(self, request: Request, pk=None):
         message = self.get_object()
         message.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

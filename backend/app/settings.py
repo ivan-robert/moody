@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "mood_message",
     "custom_auth",
+    "django_extensions_shell",
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,11 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": "postgres",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "postgres",
     }
 }
 
