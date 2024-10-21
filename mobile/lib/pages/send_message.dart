@@ -54,6 +54,7 @@ class _SendMessagePageState extends State<SendMessagePage> {
               print('Logging out');
               // Navigator.pushReplacementNamed(context, '/login');
               authService.logout();
+              Navigator.pushReplacementNamed(context, '/login'); // Navigate to login
             },
           ),
         ],
