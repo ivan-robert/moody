@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:moody/pages/login_page.dart';
-import 'package:moody/pages/send_message.dart';
+import 'package:provider/provider.dart';
+import 'package:moody/shared/auth_service.dart';
+import 'pages/login_page.dart';
+import 'pages/send_message.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => authService, // Providing the AuthService
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  final _storage = FlutterSecureStorage();
-
-  Future<bool> _isLoggedIn() async {
-    String? token = await _storage.read(key: 'auth_token');
-    return token != null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,20 +22,12 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/send-message': (context) => SendMessagePage(),
       },
-      home: FutureBuilder(
-        future: _isLoggedIn(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Loading indicator
-            return Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
+      home: Consumer<AuthService>(
+        builder: (context, authService, child) {
+          if (authService.isLoggedIn) {
+            return SendMessagePage();
           } else {
-            if (snapshot.data == true) {
-              return SendMessagePage();
-            } else {
-              return LoginPage();
-            }
+            return LoginPage();
           }
         },
       ),

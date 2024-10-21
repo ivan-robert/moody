@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moody/shared/api_service.dart';
+import 'package:moody/shared/auth_service.dart';
 
 class SendMessagePage extends StatefulWidget {
   @override
@@ -51,7 +52,8 @@ class _SendMessagePageState extends State<SendMessagePage> {
             icon: Icon(Icons.logout),
             onPressed: () async {
               print('Logging out');
-              Navigator.pushReplacementNamed(context, '/login');
+              // Navigator.pushReplacementNamed(context, '/login');
+              authService.logout();
             },
           ),
         ],
