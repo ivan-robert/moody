@@ -1,6 +1,7 @@
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -8,7 +9,7 @@ class User(AbstractUser):
     USERNAME_FIELD = "user_id"
     username = models.CharField(max_length=150)
     user_id = models.CharField(max_length=150, unique=True, blank=True)
-    last_login = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(default=timezone.now)
 
     def generate_unique_id(self):
         base_id = "@" + self.username

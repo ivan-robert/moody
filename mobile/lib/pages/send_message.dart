@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moody/shared/api_service.dart';
 import 'package:moody/shared/auth_service.dart';
@@ -20,11 +21,11 @@ class _SendMessagePageState extends State<SendMessagePage> {
       return;
     }
 
-    bool success = await apiService.dio.post('/messages', data: {
-      'message': message,
-    }) as bool;
+    Response response = await apiService.dio.post('/messages/messages/', data: {
+      'body': message,
+    });
 
-    if (success) {
+    if (response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Message sent!')),
       );

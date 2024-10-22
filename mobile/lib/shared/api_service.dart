@@ -16,23 +16,20 @@ class ApiService {
   ApiService._internal() {
     dio = Dio(_options);
 
-    // Add an interceptor to include the auth token in requests
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          String? token = await _storage.read(key: 'password');
-          if (token == null) {
+          // this is the safest code ever (spoiler: nonono)
+          String? username = await _storage.read(key: 'username');
+          if (username == null) {
             return handler.next(options);
-            // var token = await requestToken();
-            // await _storage.write(key: 'password', value: token);
           }
-          options.headers['Authorization'] = 'Bearer $token';
+          options.headers['username'] = username;
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
           if (e.response?.statusCode == 401 &&
               (e.requestOptions.extra['retries'] ?? 0) < 1) {
-            // Token invalid, generate a new one
             await _storage.delete(key: 'password');
             try {
               var token = await requestToken();

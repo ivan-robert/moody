@@ -15,13 +15,12 @@ class AuthService with ChangeNotifier {
 
   Future<void> _checkLoginStatus() async {
     bool loggedInResponse = await attemptLogin();
-    print('TON GROS ARON');
-    print(loggedInResponse);
+    print(loggedInResponse ? "logged in" : "login failed");
     _isLoggedIn = loggedInResponse;
     if (!loggedInResponse) {
       await _storage.deleteAll();
     }
-    notifyListeners(); // Notify the listeners whenever the state changes
+    notifyListeners();
   }
 
   Future<bool> createUser(String username) async {
