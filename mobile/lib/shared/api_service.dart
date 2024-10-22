@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -22,25 +20,23 @@ class ApiService {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          String? token = await _storage.read(key: 'auth_token');
+          String? token = await _storage.read(key: 'password');
           if (token == null) {
             return handler.next(options);
             // var token = await requestToken();
-            // await _storage.write(key: 'auth_token', value: token);
+            // await _storage.write(key: 'password', value: token);
           }
           options.headers['Authorization'] = 'Bearer $token';
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
-          return stderr.writeln("an error was intercepted: $e");
-
           if (e.response?.statusCode == 401 &&
               (e.requestOptions.extra['retries'] ?? 0) < 1) {
             // Token invalid, generate a new one
-            await _storage.delete(key: 'auth_token');
+            await _storage.delete(key: 'password');
             try {
               var token = await requestToken();
-              await _storage.write(key: 'auth_token', value: token);
+              await _storage.write(key: 'password', value: token);
               final options = e.requestOptions;
               options.headers['Authorization'] = 'Bearer $token';
               options.extra['retries'] = (options.extra['retries'] ?? 0) + 1;

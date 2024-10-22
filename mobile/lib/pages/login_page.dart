@@ -1,8 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:moody/shared/api_service.dart';
+import 'package:moody/shared/auth_service.dart';
 import 'send_message.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,20 +9,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
-  final _storage = FlutterSecureStorage();
 
   void _createUser() async {
     String username = _usernameController.text.trim();
 
-    Response response =
-        await apiService.dio.post("/auth/users/create_user/", data: {
-      'username': username,
-    });
+    bool hasLoggedIn = await authService.createUser(username);
 
-    var password = response.data;
-    _storage.write(key: 'auth_token', value: password);
-
-    if (response.statusCode == 201) {
+    if (hasLoggedIn) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SendMessagePage()),

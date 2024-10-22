@@ -29,15 +29,18 @@ class UserViewSet(viewsets.ModelViewSet):
     def create_user(self, request: Request):
         password = self._generate_password()
         username = request.data["username"]
-        User.objects.create_user(
+        user = User.objects.create_user(
             username=username,
             password=password,
         )
-        return Response(password, status=201)
+        user.save()
+        unique_id = user.user_id
+        return Response({"username": unique_id, "password": password}, status=201)
 
     @action(detail=False, methods=["post"])
     def login(self, request: Request):
         data = AuthenticateSerializer(request.data).data
-        print("data", data)
-        print("TA GROSSE MERE")
-        return Response("cacaa", status=200)
+        user = User.objects.get(user_id=data["username"])
+        if not user.check_password(data["password"]):
+            return Response(False, status=403)
+        return Response(True, status=200)

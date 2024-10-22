@@ -52,9 +52,9 @@ class _SendMessagePageState extends State<SendMessagePage> {
             icon: Icon(Icons.logout),
             onPressed: () async {
               print('Logging out');
-              // Navigator.pushReplacementNamed(context, '/login');
               authService.logout();
-              Navigator.pushReplacementNamed(context, '/login'); // Navigate to login
+              Navigator.pushReplacementNamed(
+                  context, '/login'); // Navigate to login
             },
           ),
         ],
