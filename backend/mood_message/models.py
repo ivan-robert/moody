@@ -18,6 +18,7 @@ class Message(models.Model):
         to_field="user_id",
         related_name="destination",
     )
+    read_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.text

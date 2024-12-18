@@ -20,8 +20,6 @@ class MessageViewSet(viewsets.ModelViewSet):
         return user
 
     def list(self, request: Request):
-        print("user")
-        print(request.user)
         messages = self.queryset
         serializer = self.serializer_class(messages, many=True)
         return Response(serializer.data)
