@@ -17,7 +17,6 @@ module.exports = {
     themes: {
       "dark": {
         colors: {
-
         }
       },
       "light": {
