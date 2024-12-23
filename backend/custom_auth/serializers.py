@@ -7,3 +7,10 @@ class AuthenticateSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["username", "password"]
+
+
+class CreateUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+    class Meta:
+        fields = ["username"]

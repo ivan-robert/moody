@@ -12,6 +12,7 @@ class User(AbstractUser):
     last_login = models.DateTimeField(default=timezone.now)
 
     def generate_unique_id(self):
+        print("username", self.username)
         base_id = "@" + self.username
         unique_id = base_id
         counter = 1

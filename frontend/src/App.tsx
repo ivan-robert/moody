@@ -2,6 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./modules/shared/query-client";
+import LoginPage from "./pages/Login.page";
 
 import AboutPage from "@/pages/about";
 import BlogPage from "@/pages/blog";
@@ -13,6 +14,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
+        <Route element={<LoginPage />} path="/login" />
         <Route element={<IndexPage />} path="/" />
         <Route element={<SendPage />} path="/docs" />
         <Route element={<PricingPage />} path="/pricing" />

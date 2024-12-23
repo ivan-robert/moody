@@ -25,10 +25,13 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request: Request):
+        print("CREATING")
         serializer = MessageCreationSerializer(data=request.data)
         if serializer.is_valid():
             user_destination = self._select_destination(request)
-            user_source = User.objects.get(user_id=request.headers["username"])
+            user_source = None
+            if request.headers.get("username") is not None:
+                user_source = User.objects.get(user_id=request.headers["username"])
             Message.objects.create(
                 text=serializer.validated_data["body"],
                 user=user_source,

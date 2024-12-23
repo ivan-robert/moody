@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('mood_message', '0002_alter_message_destination_alter_message_user'),
+        ("mood_message", "0002_alter_message_destination_alter_message_user"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='message',
-            name='read_at',
+            model_name="message",
+            name="read_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

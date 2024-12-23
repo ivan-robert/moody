@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from custom_auth.models import User
-from custom_auth.serializers import AuthenticateSerializer
+from custom_auth.serializers import AuthenticateSerializer, CreateUserSerializer
 
 
 # Serializers define the API representation.
@@ -27,8 +27,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"])
     def create_user(self, request: Request):
+        serializer = CreateUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        username = serializer.validated_data["username"]
         password = self._generate_password()
-        username = request.data["username"]
         user = User.objects.create_user(
             username=username,
             password=password,

@@ -1,6 +1,4 @@
-import { Navbar } from "@/components/navbar";
-
-const LoginRedirect = () => {
+export const LoginRedirect = () => {
   // Redirect to login page if not authenticated
   const isAuthenticatedFromLocalStorage = localStorage.getItem("username");
 
@@ -20,19 +18,3 @@ const LoginRedirect = () => {
 
   return null;
 };
-
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <LoginRedirect />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        {children}
-      </main>
-    </div>
-  );
-}
