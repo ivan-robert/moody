@@ -1,6 +1,7 @@
 import random
 
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -12,6 +13,23 @@ from mood_message.serializers import MessageCreationSerializer, MessageSerialize
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+    @action(detail=False, methods=["get"])
+    def today(self, request: Request):
+        user_id = request.headers.get("username")
+        if user_id is None:
+            return Response(
+                {"error": "Username is required in the headers"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user = User.objects.get(user_id=user_id)
+        print("THE USER IS", user)
+        today_message = Message.get_today_message(user)
+        if today_message:
+            serializer = self.serializer_class(today_message)
+            return Response(serializer.data)
+        else:
+            return Response("no message", status=status.HTTP_404_NOT_FOUND)
 
     def _select_destination(self, request: Request):
         nb_users = User.objects.all().count()
@@ -29,9 +47,13 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = MessageCreationSerializer(data=request.data)
         if serializer.is_valid():
             user_destination = self._select_destination(request)
-            user_source = None
-            if request.headers.get("username") is not None:
-                user_source = User.objects.get(user_id=request.headers["username"])
+            user_source = request.headers.get("username")
+            if user_source is None:
+                return Response(
+                    {"error": "Username is required in the headers"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            user_source = User.objects.get(user_id=user_source)
             Message.objects.create(
                 text=serializer.validated_data["body"],
                 user=user_source,

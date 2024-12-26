@@ -8,6 +8,24 @@ import { z } from "zod";
 
 import { useSendMessage } from "./useSendMessage";
 
+const getSubmitStatus = ({
+  isError,
+  isSuccess,
+}: {
+  isSuccess: boolean;
+  isError: boolean;
+}) => {
+  if (isError) {
+    return "danger";
+  }
+
+  if (isSuccess) {
+    return "success";
+  }
+
+  return "primary";
+};
+
 const formValuesSchema = z.object({
   message: z.string().min(1, "Message is required"),
 });
@@ -15,7 +33,7 @@ const formValuesSchema = z.object({
 type FormValues = z.infer<typeof formValuesSchema>;
 
 const SendForm: React.FC = () => {
-  const { mutate, isPending } = useSendMessage();
+  const { mutate, isPending, status } = useSendMessage();
   const { control, handleSubmit, formState, watch } = useForm<FormValues>({
     defaultValues: {
       message: "",
@@ -24,7 +42,6 @@ const SendForm: React.FC = () => {
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log(formState.errors);
     mutate(data.message);
   };
 
@@ -62,7 +79,10 @@ const SendForm: React.FC = () => {
       >
         <Button
           className="w-full group relative overflow-hidden shadow-lg hover:shadow-primary/50"
-          color={formState.errors.message ? "danger" : "primary"}
+          color={getSubmitStatus({
+            isError: !!formState.errors.message,
+            isSuccess: status === "success",
+          })}
           isDisabled={watch("message") === ""}
           isLoading={isPending}
           type="submit"

@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+
+from custom_auth.models import User
 
 # Create your models here.
 
@@ -19,6 +22,13 @@ class Message(models.Model):
         related_name="destination",
     )
     read_at = models.DateTimeField(null=True, blank=True)
+
+    @classmethod
+    def get_today_message(cls, user: User):
+        today = timezone.now().date()
+        return Message.objects.filter(
+            user__user_id=user.user_id, created_at__date=today
+        ).first()
 
     def __str__(self):
         return self.text
