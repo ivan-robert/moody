@@ -6,8 +6,6 @@ import { API_URL } from "@/modules/shared/constants";
 const fetchTodayMessage = async () => {
   const today = new Date();
 
-  today.setHours(0, 0, 0, 0);
-
   const queryParams = new URLSearchParams({
     created_at: today.toISOString().split("T")[0],
     destination: localStorage.getItem("username") || "",
@@ -24,7 +22,13 @@ const fetchTodayMessage = async () => {
     return null;
   }
 
-  return await response.json();
+  const content: DayMessage[] = await response.json();
+
+  if (!content.length) {
+    return null;
+  }
+
+  return content[0];
 };
 
 export const useTodayReceivedMessage = () => {

@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { DayMessage } from "../types";
 
@@ -6,8 +6,6 @@ import { API_URL } from "@/modules/shared/constants";
 
 const fetchTodayMessage = async () => {
   const today = new Date();
-
-  today.setHours(0, 0, 0, 0);
 
   // Create the query parameters
   const queryParams = new URLSearchParams({
@@ -32,7 +30,7 @@ const fetchTodayMessage = async () => {
 };
 
 export const useTodaySentMessage = () => {
-  return useSuspenseQuery<DayMessage | null>({
+  return useQuery<DayMessage | null>({
     queryKey: ["today-sent-message"],
     queryFn: fetchTodayMessage,
   });

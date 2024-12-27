@@ -30,20 +30,20 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <LoginRedirect />
-      <Suspense
-        fallback={
-          <div className="flex flex-1 items-center justify-center">
-            <Spinner />
-          </div>
-        }
-      >
+    <Suspense
+      fallback={
+        <div className="flex flex-1 items-center justify-center">
+          <Spinner />
+        </div>
+      }
+    >
+      <div className="relative flex flex-col h-screen">
+        <Navbar />
+        <LoginRedirect />
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
           {children}
         </main>
-      </Suspense>
-    </div>
+      </div>
+    </Suspense>
   );
 }
