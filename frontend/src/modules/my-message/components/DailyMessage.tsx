@@ -17,7 +17,7 @@ const MyMessage: React.FC<Props> = ({ message }) => {
       const timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + message.text[currentIndex]);
         setCurrentIndex((prev) => prev + 1);
-      }, 30); // Faster typing speed (was 50)
+      }, 30);
 
       return () => clearTimeout(timeout);
     } else {

@@ -2,22 +2,38 @@ import { Spinner } from "@nextui-org/react";
 import { Suspense } from "react";
 
 import { Navbar } from "@/components/navbar";
+import { API_URL } from "@/modules/shared/constants";
+
+const disconnect = () => {
+  localStorage.removeItem("username");
+  localStorage.removeItem("password");
+};
+
+const attemptAuthentication = async (username: string, password: string) => {
+  const response = await fetch(`${API_URL}/auth/users/login/`, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-type": "application/json" },
+  });
+
+  if (response.status !== 200) {
+    window.location.href = "/login";
+    disconnect();
+  }
+};
 
 const LoginRedirect = () => {
   // Redirect to login page if not authenticated
-  const isAuthenticatedFromLocalStorage = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
+  const token = localStorage.getItem("password");
 
-  if (
-    !isAuthenticatedFromLocalStorage &&
-    window.location.pathname !== "/login"
-  ) {
+  if (!username && window.location.pathname !== "/login") {
     window.location.href = "/login";
   }
 
-  if (
-    isAuthenticatedFromLocalStorage &&
-    window.location.pathname === "/login"
-  ) {
+  attemptAuthentication(username!, token!);
+
+  if (username && window.location.pathname === "/login") {
     window.location.href = "/";
   }
 

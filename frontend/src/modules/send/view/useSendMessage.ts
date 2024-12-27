@@ -4,7 +4,7 @@ import { API_URL } from "@/modules/shared/constants";
 import { queryClient } from "@/modules/shared/query-client";
 
 const sendMessage = async (message: string) => {
-  const response = await fetch(`${API_URL}/messages/messages/`, {
+  const response = await fetch(`${API_URL}/messages/`, {
     body: JSON.stringify({ body: message }),
     headers: {
       "Content-Type": "application/json",
