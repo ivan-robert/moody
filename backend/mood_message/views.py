@@ -2,7 +2,6 @@ import random
 
 from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
-from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -35,22 +34,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     filterset_class = MessageFilter
-
-    @action(detail=False, methods=["get"])
-    def today(self, request: Request):
-        user_id = request.headers.get("username")
-        if user_id is None:
-            return Response(
-                {"error": "Username is required in the headers"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        user = User.objects.get(user_id=user_id)
-        today_message = Message.get_today_message(user)
-        if today_message:
-            serializer = self.serializer_class(today_message)
-            return Response(serializer.data)
-        else:
-            return Response("no message", status=status.HTTP_404_NOT_FOUND)
 
     def _select_destination(self, request: Request):
         nb_users = User.objects.all().count()
