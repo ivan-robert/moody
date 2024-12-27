@@ -1,1 +1,3 @@
-export type DayMessage = {};
+export type DayMessage = {
+  text: string;
+};

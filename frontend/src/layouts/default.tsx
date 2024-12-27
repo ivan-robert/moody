@@ -1,3 +1,6 @@
+import { Spinner } from "@nextui-org/react";
+import { Suspense } from "react";
+
 import { Navbar } from "@/components/navbar";
 
 const LoginRedirect = () => {
@@ -30,9 +33,17 @@ export default function DefaultLayout({
     <div className="relative flex flex-col h-screen">
       <Navbar />
       <LoginRedirect />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        {children}
-      </main>
+      <Suspense
+        fallback={
+          <div className="flex flex-1 items-center justify-center">
+            <Spinner />
+          </div>
+        }
+      >
+        <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+          {children}
+        </main>
+      </Suspense>
     </div>
   );
 }

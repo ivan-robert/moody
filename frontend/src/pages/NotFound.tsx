@@ -1,19 +1,19 @@
 import { Button } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { memo } from "react";
+import { BiSolidHome } from "react-icons/bi";
+import { FaRegSadTear } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-type Props = {
-  messageBody: string;
-};
+type Props = {};
 
-const FormSuccess: React.FC<Props> = ({ messageBody }) => {
+const NotFound: React.FC<Props> = () => {
   const navigate = useNavigate();
 
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center p-8 text-center"
+      className="flex flex-col items-center justify-center min-h-screen p-8 text-center"
       initial={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
     >
@@ -29,29 +29,25 @@ const FormSuccess: React.FC<Props> = ({ messageBody }) => {
           times: [0, 0.2, 0.4, 0.6, 0.8],
         }}
       >
-        😊
+        <FaRegSadTear className="text-primary" />
       </motion.div>
 
       <motion.h2
         animate={{ opacity: 1 }}
-        className="text-2xl font-bold mb-4"
+        className="text-4xl font-bold mb-4"
         initial={{ opacity: 0 }}
         transition={{ delay: 0.2 }}
       >
-        Message Sent Successfully!
+        404 - Page Not Found
       </motion.h2>
 
       <motion.p
         animate={{ opacity: 1 }}
-        className="text-default-600 mb-8 max-w-md"
+        className="text-default-600 mb-8"
         initial={{ opacity: 0 }}
         transition={{ delay: 0.3 }}
       >
-        Your message today:
-        <br />
-        <span className="italic mt-2 block bg-default-100 p-4 rounded-lg">
-          {messageBody}
-        </span>
+        {"The page you're looking for doesn't exist."}
       </motion.p>
 
       <motion.div
@@ -61,11 +57,11 @@ const FormSuccess: React.FC<Props> = ({ messageBody }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <div className="h-4" />
         <Button
           className="font-semibold"
           color="primary"
           size="lg"
+          startContent={<BiSolidHome className="text-xl" />}
           variant="shadow"
           onPress={() => navigate("/")}
         >
@@ -76,4 +72,4 @@ const FormSuccess: React.FC<Props> = ({ messageBody }) => {
   );
 };
 
-export default memo(FormSuccess);
+export default memo(NotFound);

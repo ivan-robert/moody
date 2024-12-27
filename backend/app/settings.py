@@ -43,7 +43,14 @@ INSTALLED_APPS = [
     "mood_message",
     "custom_auth",
     "django_extensions_shell",
+    "django_filters",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -1,5 +1,6 @@
 import random
 
+from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -10,9 +11,30 @@ from mood_message.models import Message
 from mood_message.serializers import MessageCreationSerializer, MessageSerializer
 
 
+class MessageFilter(filters.FilterSet):
+    user = filters.CharFilter(field_name="user__user_id")
+    destination = filters.CharFilter(field_name="destination__user_id")
+    created_at = filters.DateFilter(field_name="created_at__date")
+    created_after = filters.DateFilter(field_name="created_at__date", lookup_expr="gte")
+    created_before = filters.DateFilter(
+        field_name="created_at__date", lookup_expr="lte"
+    )
+
+    class Meta:
+        model = Message
+        fields = [
+            "user",
+            "destination",
+            "created_at",
+            "created_after",
+            "created_before",
+        ]
+
+
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    filterset_class = MessageFilter
 
     @action(detail=False, methods=["get"])
     def today(self, request: Request):
@@ -23,7 +45,6 @@ class MessageViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user = User.objects.get(user_id=user_id)
-        print("THE USER IS", user)
         today_message = Message.get_today_message(user)
         if today_message:
             serializer = self.serializer_class(today_message)
@@ -38,12 +59,12 @@ class MessageViewSet(viewsets.ModelViewSet):
         return user
 
     def list(self, request: Request):
-        messages = self.queryset
+        print(request.query_params)
+        messages = self.filter_queryset(self.queryset)
         serializer = self.serializer_class(messages, many=True)
         return Response(serializer.data)
 
     def create(self, request: Request):
-        print("CREATING")
         serializer = MessageCreationSerializer(data=request.data)
         if serializer.is_valid():
             user_destination = self._select_destination(request)

@@ -5,7 +5,7 @@ from mood_message.views import MessageViewSet
 
 # Create a router and register the MessageViewSet
 router = DefaultRouter()
-router.register(r"messages", MessageViewSet)
+router.register(r"", MessageViewSet)
 
 # Wire up the API using automatic URL routing
 urlpatterns = [
